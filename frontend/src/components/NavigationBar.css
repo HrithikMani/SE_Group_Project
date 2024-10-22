@@ -1,0 +1,59 @@
+/* Add this custom CSS to your component or stylesheet */
+.custom-nav {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.image-logo {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.brand {
+  padding-left: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.navigation {
+  height: auto; /* Adjust the height of the navigation bar */
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1); /* Adding a bottom border for thickness */
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+
+.nav-link:hover {
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar-toggler {
+  border: none;
+  outline: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .custom-nav {
+    flex-direction: column;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .nav-link {
+    padding-left: 20px; /* Adjust as needed */
+    width: 100%;
+  }
+
+  .navbar-collapse {
+    margin-top: 20px;
+  }
+}

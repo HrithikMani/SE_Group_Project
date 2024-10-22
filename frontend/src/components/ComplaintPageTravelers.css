@@ -1,0 +1,51 @@
+.complaint-container {
+  height: 550px;
+  flex-grow: 1; /* Allow .complaint-container to grow and take available space */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content horizontally */
+  justify-content: flex-start; /* Align content to the top */
+  padding: 20px;
+  bottom: 10px;
+}
+
+.complaint-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 560px;
+  max-width: 100%; /* Ensure the form doesn't exceed the viewport width */
+}
+  
+  .complaint-form label {
+    font-weight: 600;
+    height: 15px;
+  }
+  
+  .complaint-form select,
+  .complaint-form textarea {
+    width: 100%;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  .complaint-form button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .complaint-form button:hover {
+    background-color: #0056b3;
+  }
+
+  p{
+    font-size: small;
+  }

@@ -1,0 +1,44 @@
+/* Main card container */
+.login-card {
+  width: 55%;
+  height: 65%;
+  transform-style: preserve-3d; /* This makes sure child elements can have a 3D transform */
+  transition: transform 0.5s;
+  perspective: 1000px; /* Depth perception for 3D effect */
+  background-color: white; /* Added white background */
+}
+
+/* Flipping effect */
+.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Front of the card styles */
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Hide the back of the pane during the swap */
+}
+
+.card-front {
+  /* Display the front when not flipped */
+  transform: rotateY(0deg);
+}
+
+.card-back {
+  /* Display the back (it's initially hidden) */
+  transform: rotateY(180deg);
+}
+.form-inputs{
+  text-justify: center;
+  padding: 2px;
+}
+.login-btn{
+  text-align: center;
+}
+.logo-btn{
+  height: 40px;
+  width: 160px;
+}

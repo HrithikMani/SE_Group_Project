@@ -1,0 +1,77 @@
+.employee-container {
+    width: 80%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .employee-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 3px;
+    max-height: 600px;
+  }
+  
+  .employee-fields {
+    flex: 1;
+    min-width: 250px;
+    padding-left: 20px;
+  }
+  
+  .form-field {
+    margin-bottom: 1rem;
+  }
+  
+  .form-field label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-field input[type="file"] {
+    border: none;
+  }
+  
+  .form-field input,
+  .form-field button {
+    width: 60%;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .save-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .save-button:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Additional styles for responsiveness */
+  @media (max-width: 768px) {
+    .profile-content {
+      flex-direction: column;
+    }
+  
+    .profile-image-container {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  }
+
+  span{
+    padding: 10px;
+    color: red;
+  }
+  
