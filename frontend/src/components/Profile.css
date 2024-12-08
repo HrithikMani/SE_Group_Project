@@ -1,0 +1,104 @@
+.profile-container {
+    width: 80%;
+    max-width: 900px;
+    margin: 2rem auto;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    font-size: 1.5rem;
+    background-color: #00B2A9;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .profile-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 1rem;
+    max-height: 600px;
+  }
+  
+  .profile-image-container {
+      flex-basis: 200px;
+  margin-right: 2rem;
+  background-color: #fff; /* white background */
+  padding: 1rem;
+  border-radius: 8px; /* rounded corners for the card */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* subtle shadow */
+  text-align: center; /* Center content */
+  margin-top: 1rem; 
+  }
+  
+  .profile-image {
+    width: 10rem; /* fixed width */
+    height: 10rem; /* fixed height to maintain aspect ratio */
+    border-radius: 50%; /* circular shape */
+    object-fit: cover; /* cover the container properly */
+    display: block; /* to apply margin auto for centering */
+    margin: auto; /* center the image inside the container */
+    border: 3px solid #fff; /* optional: white border around the image to match the reference */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* optional: shadow for depth */
+    background-color: #f2f6fc; /* optional: background color if the image is transparent */
+  }
+  
+  .profile-fields {
+    flex: 1;
+    min-width: 250px;
+    padding-left: 20px;
+  }
+  
+  .form-field {
+    margin-bottom: 1rem;
+  }
+  
+  .form-field label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-field input[type="file"] {
+    border: none;
+  }
+  
+  .form-field select,
+  .form-field input,
+  .form-field button {
+    width: 100%;
+    padding: 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .save-button {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1rem;
+  }
+  
+  .save-button:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Additional styles for responsiveness */
+  @media (max-width: 768px) {
+    .profile-content {
+      flex-direction: column;
+    }
+  
+    .profile-image-container {
+      margin-right: 0;
+      margin-bottom: 1rem;
+    }
+  }
+  
