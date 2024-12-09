@@ -207,3 +207,137 @@ app.post('/update-complaint-assign',async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+app.post('/update-profile', async (req, res) => {
+    const { empId, empFirstName, empLastName, phone, email, birthDate, profileImage } = req.body;
+  
+    try {
+      // Assuming User is your user model and empId uniquely identifies a user
+      const updatedUser = await User.findOneAndUpdate(
+        { empId: empId },
+        { 
+          empFirstName: empFirstName,
+          empLastName: empLastName,
+          phone: phone,
+          email: email,
+          birthDate: birthDate,
+          profileImage: profileImage 
+        },
+        { new: true } // This option returns the document after update was applied
+      );
+  
+      if (updatedUser) {
+        res.status(200).json(updatedUser);
+      } else {
+        res.status(404).send('User not found');
+      }
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  app.post('/update-user-assign', async (req, res) => {
+    try {
+      const {empId, status} = req.body;
+  
+      // Find the user by ID and update the specified fields
+      const updatedUser = await User.findOneAndUpdate(
+        { empId: {$eq : empId}},
+        { $set: { assignstatus: status} },
+        { new: true }
+      );
+  
+      if (updatedUser) {
+        res.json(updatedUser);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  app.get('/check-empId/:empId', async (req, res) => {
+    try {
+      const empIdExists = await User.exists({empId: req.params.empId });
+      res.json({ exists: empIdExists });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  app.get('/check-email/:email', async (req, res) => {
+    try {
+      const emailExists = await User.exists({ email: req.params.email });
+      res.json({ exists: emailExists });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+  app.post('/update-order', async (req, res) => {
+    try {
+      const {_id, status} = req.body;
+      // Find the user by ID and update the specified fields
+      const updatedOrder = await Order.findOneAndUpdate(
+        { _id: {$eq : _id}},
+        { $set: { status: status} },
+        { new: true }
+      );
+  
+      if (updatedOrder) {
+        res.json(updatedOrder);
+      } else {
+        res.status(404).json({ error: 'User not found' });
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+  
+  app.post('/get-employee', async (req, res) => {
+    const { user } = req.body;
+    try {
+      const employees = await User.findOne({empId: {$eq : user}})
+      res.json(employees);
+    } catch (error) {
+      console.error('Error fetching employee:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  app.post('/get-employees', async (req, res) => {
+    const { user } = req.body;
+    try {
+      const employees = await User.find({manager: {$eq : user}})
+      res.json(employees);
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
+  app.get('/get-trains', async (req, res) => {
+    const trains = await Train.find();
+    res.json(trains);
+  });
+  
+  app.post('/get-train', async (req, res) => {
+    const { trainNo } = req.body;
+    try {
+      const trainType = await Train.findOne({trainNo: {$eq : trainNo}})
+      const trainDetails = await TrainDetail.findOne({traintype: {$eq: trainType.traintype}});
+      res.json(trainDetails);
+    } catch (error) {
+      console.error('Error fetching trains:', error);
+      res.status(500).send('Internal Server Error');
+    }
+  
+  });
+  
