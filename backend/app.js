@@ -341,3 +341,134 @@ app.post('/update-profile', async (req, res) => {
   
   });
   
+
+// API endpoint to delete a complaint by ID
+app.delete('/delete-complaint/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Complaint.findByIdAndDelete(id);
+    res.send('Complaint deleted successfully');
+  } catch (error) {
+    console.error('Error deleting complaint:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.delete('/delete-order/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Order.findByIdAndDelete(id);
+    res.send('Order deleted successfully');
+  } catch (error) {
+    console.error('Error deleting complaint:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.delete('/delete-assignment/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Assignment.findByIdAndDelete(id);
+    res.send('Assignment deleted successfully');
+  } catch (error) {
+    console.error('Error deleting complaint:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+app.post('/login', async (req, res) => {
+  const { empId, password, role } = req.body;
+
+  const user = await User.findOne({ empId, role });
+
+  if (!user) {
+      return res.status(400).json({ message: 'User not found' });
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+  }
+  req.session.user = { empId, role: role };
+  // Generate JWT Token
+  const secret = process.env.JWT_SECRET
+  const token = jwt.sign({ id: user._id, role: user.role }, secret, { expiresIn: '1h' });
+
+  // Successful login
+  return res.status(200).json({ message: 'Logged successfully', token });
+});
+
+let otpStore = {};
+
+app.post('/request-password-reset', async (req, res) => {
+  const {empId, email} = req.body;
+  const otp = crypto.randomBytes(3).toString('hex').toUpperCase();
+  
+  otpStore[email] = { otp, expires: new Date().getTime() + 60 }; // 1 minutes expiry
+
+  const mailOptions = {
+    from: process.env.EMAIL_ADDRESS,
+    to: email,
+    subject: 'Password Reset OTP',
+    text: `Your OTP is ${otp}`
+  };
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.send('OTP sent to email');
+    }
+  });
+});
+
+app.post('/reset-password', async(req, res) => {
+  const { empId, email, otp, password } = req.body;
+
+  const storedOtp = otpStore[email];
+
+  try{
+
+    if (!storedOtp || storedOtp.expires > new Date().getTime()) {
+      delete otpStore[email]; // Clear the used OTP
+      return res.status(400).send('OTP expired or invalid');
+    }
+    
+    if (storedOtp.otp !== otp) {
+      delete otpStore[email]; // Clear the used OTP
+      return res.status(400).send('Invalid OTP');
+    }
+    
+
+  // Proceed to reset password logic (e.g., update in database)
+  // Remember to hash the new password before storing
+  const hashedPassword = await bcrypt.hash(password, 10);
+  const updatePassword = await User.findOneAndUpdate(
+    { empId: {$eq : empId}, email: {$eq : email}},
+    { $set: { password: hashedPassword} },
+    { new: true }
+  );
+
+  if (updatePassword) {
+    res.statusCode(201).json(updatePassword);
+  } else {
+    console.log('User not found with the provided email.');
+  }
+ } catch (error) {
+  console.error('Error updating password:', error);
+}
+  // Clear the used OTP
+  delete otpStore[email];
+
+  res.send('Password reset successfully');
+});
+
+
+// Start the server
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
