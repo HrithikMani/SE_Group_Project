@@ -15,7 +15,7 @@ import UriContext from './UriContext';
 
 function App() {
 
-  const uriValue = 'https://express-backend-4ounryxgoq-uc.a.run.app';
+  const uriValue = 'http://18.205.236.103:3001';
 
   return (
     <div className="App">
