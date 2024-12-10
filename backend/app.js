@@ -16,6 +16,25 @@ const crypto = require('crypto');
 const session = require('express-session');
 
 
+
+const kafka = require('kafka-node');
+
+// Kafka Producer Configuration
+const Producer = kafka.Producer;
+const kafkaClient = new kafka.KafkaClient({ kafkaHost: 'localhost:9092' });
+const producer = new Producer(kafkaClient);
+
+producer.on('ready', () => {
+  console.log('Kafka Producer is ready');
+});
+
+producer.on('error', (err) => {
+  console.error('Kafka Producer error:', err);
+});
+
+
+
+
 const app = express();
 // Middleware to parse JSON and form data
 app.use(bodyParser.json({ limit: '50mb' }));
@@ -56,10 +75,11 @@ app.post('/submit-complaint', async (req, res) => {
 });
 
 app.post('/create-employee', async (req, res) => {
-  const {empId, department, role, manager, email, empFirstName, empLastName, password} = req.body;
+  const { empId, department, role, manager, email, empFirstName, empLastName, password } = req.body;
   console.log(manager);
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+
     // Create a new employee instance
     const newEmployee = new User({
       empId: empId,
@@ -71,24 +91,26 @@ app.post('/create-employee', async (req, res) => {
       empLastName: empLastName,
       password: hashedPassword,
       status: 'active',
-      assignstatus: 'unassign'
+      assignstatus: 'unassign',
     });
-    const updatedUser = newEmployee.save();
+    await newEmployee.save();
 
-    // Send a welcome email to the employee
-    const mailOptions = {
-      from: process.env.USER,
+    // Email details to be sent to Kafka
+    const emailEvent = {
       to: email,
       subject: 'Welcome to the Company!',
       text: `Dear ${empFirstName},\n\nWelcome to our company! Your employee ID is ${empId} and password: ${password}.\n\nBest regards,\nThe Company Team`,
     };
 
-    // Send the email
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
+    // Send email details to Kafka
+    const payloads = [
+      { topic: 'email-service', messages: JSON.stringify(emailEvent) },
+    ];
+    producer.send(payloads, (err, data) => {
+      if (err) {
+        console.error('Error sending email event to Kafka:', err);
       } else {
-        console.log('Email sent: ' + info.response);
+        console.log('Email event sent to Kafka:', data);
       }
     });
 
